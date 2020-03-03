@@ -4,22 +4,30 @@
             <span class="indent" [style.width.px]="item.indent * intendWidth"></span>
             <span *ngIf="item.children" (click)="_ontoggleNode(item)">
                 <span *ngIf="item.isOpen !== false">
-                    <svg class="icon icon-folder-open">
+                    <svg *ngIf="!iconParentOpen" class="icon icon-folder-open">
                         <use xlink:href="#icon-folder-open"></use>
                     </svg>
+                    <ng-template *ngIf="iconParentOpen" [ngTemplateOutlet]="iconParentOpen" [ngTemplateOutletContext]="{ item: item }">
+                    </ng-template>
                 </span>
                 <span *ngIf="item.isOpen === false">
-                    <svg class="icon icon-folder">
+                    <svg *ngIf="!iconParentClose" class="icon icon-folder">
                         <use xlink:href="#icon-folder"></use>
                     </svg>
+                    <ng-template *ngIf="iconParentClose" [ngTemplateOutlet]="iconParentClose" [ngTemplateOutletContext]="{ item: item }">
+                    </ng-template>
                 </span>
             </span>
             <span *ngIf="!item.children" (click)="_onclickLabel(item)">
-                <svg class="icon icon-file-text2">
+                <svg *ngIf="!iconLeaf" class="icon icon-file-text2">
                     <use xlink:href="#icon-file-text2"></use>
                 </svg>
+                <ng-template *ngIf="iconLeaf" [ngTemplateOutlet]="iconLeaf" [ngTemplateOutletContext]="{ item: item }">
+                </ng-template>
             </span>
-            {{ item.label }}
+            <ng-container *ngIf="!labelTemplate">{{ item.label }}</ng-container>
+            <ng-template *ngIf="labelTemplate" [ngTemplateOutlet]="labelTemplate" [ngTemplateOutletContext]="{ item: item }">
+            </ng-template>
         </div>
     </ng-container>
 </virtual-scroller>

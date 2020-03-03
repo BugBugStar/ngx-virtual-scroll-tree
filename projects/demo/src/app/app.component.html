@@ -1,21 +1,54 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+normal use
+<div>
+  <ngx-virtual-scroll-tree class="file-tree" [treeData]="treeData">
+  </ngx-virtual-scroll-tree>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
-<ngx-virtual-scroll-tree class="file-tree" [treeData]="treeData"></ngx-virtual-scroll-tree>
 
+diy icon and label by template
+<div>
+  <ngx-virtual-scroll-tree class="file-tree" [treeData]="treeData" [iconParentOpen]="iconParentOpen"
+    [iconParentClose]="iconParentClose" [iconLeaf]="iconLeaf" [labelTemplate]="labelTemplate">
+  </ngx-virtual-scroll-tree>
+</div>
+<ng-template #iconParentOpen>
+  <svg class="icon icon-circle-down">
+    <use xlink:href="#icon-circle-down"></use>
+  </svg>
+</ng-template>
+<ng-template #iconParentClose>
+  <svg class="icon icon-circle-right">
+    <use xlink:href="#icon-circle-right"></use>
+  </svg>
+</ng-template>
+<ng-template #iconLeaf>
+  <svg class="icon icon-radio-unchecked">
+    <use xlink:href="#icon-radio-unchecked"></use>
+  </svg>
+</ng-template>
+<ng-template #labelTemplate let-item="item">
+  <span [style.color]="item.children ? '' : 'red'">{{ item.label }}</span>
+</ng-template>
+<svg class="hidden" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <symbol id="icon-circle-right" viewBox="0 0 32 32">
+      <title>circle-right</title>
+      <path
+        d="M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zM16 29c-7.18 0-13-5.82-13-13s5.82-13 13-13 13 5.82 13 13-5.82 13-13 13z">
+      </path>
+      <path d="M11.086 22.086l2.829 2.829 8.914-8.914-8.914-8.914-2.828 2.828 6.086 6.086z"></path>
+    </symbol>
+    <symbol id="icon-circle-down" viewBox="0 0 32 32">
+      <title>circle-down</title>
+      <path
+        d="M32 16c0-8.837-7.163-16-16-16s-16 7.163-16 16 7.163 16 16 16 16-7.163 16-16zM3 16c0-7.18 5.82-13 13-13s13 5.82 13 13-5.82 13-13 13-13-5.82-13-13z">
+      </path>
+      <path d="M9.914 11.086l-2.829 2.829 8.914 8.914 8.914-8.914-2.828-2.828-6.086 6.086z"></path>
+    </symbol>
+    <symbol id="icon-radio-unchecked" viewBox="0 0 32 32">
+      <title>radio-unchecked</title>
+      <path
+        d="M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zM16 28c-6.627 0-12-5.373-12-12s5.373-12 12-12c6.627 0 12 5.373 12 12s-5.373 12-12 12z">
+      </path>
+    </symbol>
+  </defs>
+</svg>
