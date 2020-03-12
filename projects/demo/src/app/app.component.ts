@@ -10,6 +10,46 @@ import * as _ from 'lodash';
 export class AppComponent {
   title = 'demo';
   treeData: ITreeItem[];
+  treeData2 = [
+    {
+      label: 'first',
+      children: [
+        {
+          label: 'first1',
+          children: [
+            {
+              label: 'first2',
+              children: [
+                {
+                  label: 'first3',
+                },
+              ]
+            },
+          ]
+        },
+      ]
+    },
+    {
+      label: 'second',
+      children: [
+        {
+          label: 'second2',
+          children: [
+            {
+              label: 'second2',
+            },
+            {
+              label: 'second3',
+            },
+          ]
+        },
+        {
+          id: 22,
+          label: 'second3',
+        },
+      ]
+    },
+  ];
 
   constructor() {
     const firstLayer: ITreeItem[] = [];

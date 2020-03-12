@@ -16,3 +16,7 @@
     stroke: currentColor;
     fill: currentColor;
 }
+
+.selected {
+    background-color: rgb(152, 182, 213);
+}

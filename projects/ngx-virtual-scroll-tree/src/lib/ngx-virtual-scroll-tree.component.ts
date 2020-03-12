@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, TemplateRef, Output, EventEmitter, ViewChild, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, TemplateRef, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
-import { ITreeItem } from './ITreeItem';
+import { ITreeItem, TreeItem } from './ITreeItem';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'ngx-virtual-scroll-tree',
@@ -25,6 +26,7 @@ export class VirtualScrollTreeComponent implements OnInit, OnChanges {
   filtedItems: ITreeItem[];
   items: ITreeItem[];
   private lastSeletedItem: ITreeItem;
+  private treeItemData: ITreeItem[];
 
 
   constructor() { }
@@ -32,8 +34,21 @@ export class VirtualScrollTreeComponent implements OnInit, OnChanges {
   ngOnInit() {
   }
 
-  ngOnChanges() {
-    this.items = this.getItemsByTreeData(this.treeData);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.treeData) {
+      this.treeItemData = _.cloneDeep(this.treeData);
+      this.initTreeData(this.treeItemData);
+    }
+    this.updateItems();
+  }
+
+  private initTreeData(treeItemList: any[]) {
+    for (let i = 0; i < treeItemList.length; i++) {
+      treeItemList[i] = new TreeItem(treeItemList[i]);
+      if (treeItemList[i].children) {
+        this.initTreeData(treeItemList[i].children);
+      }
+    }
   }
 
   private getItemsByTreeData(treeData) {
@@ -45,16 +60,35 @@ export class VirtualScrollTreeComponent implements OnInit, OnChanges {
   }
 
   private getTreeItemListByTreeItem(treeItem: ITreeItem): ITreeItem[] {
-    let treeItemList: ITreeItem[] = [treeItem];
-    if (treeItem.children && treeItem.children.length > 0 &&
-      !(treeItem.isOpen === false)) {
-      for (const child of treeItem.children) {
-        child.parent = treeItem;
-        child.indent = treeItem.indent ? treeItem.indent + 1 : 1;
+    let treeItemList: ITreeItem[] = [treeItem instanceof TreeItem ? treeItem : new TreeItem(treeItem)];
+    if (treeItem.children) {
+      for (let i = 0; i < treeItem.children.length; i++) {
+        const child = new TreeItem(treeItem.children[i]);
+        treeItemList[0].children[i] = child;
+        child.parent = treeItemList[0];
         treeItemList = treeItemList.concat(this.getTreeItemListByTreeItem(child));
       }
     }
     return treeItemList;
+  }
+
+  private updateItems() {
+    this.items = this.getItemsByTreeData(this.treeItemData);
+    this.removeNoLeafNode(this.items);
+  }
+
+  private removeNoLeafNode(items: ITreeItem[]) {
+    for (let i = 0; i < items.length; ) {
+      const item = items[i];
+      if (item.children && item.children.length === 1 && item.parent) {
+        item.parent.label += ' / ' + item.label;
+        item.parent.children = item.children;
+        item.children.forEach(child => child.parent = item.parent);
+        items.splice(i, 1);
+      } else {
+        i++;
+      }
+    }
   }
 
   _onclickLabel(item) {
@@ -72,7 +106,7 @@ export class VirtualScrollTreeComponent implements OnInit, OnChanges {
 
   _ontoggleNode(item) {
     item.isOpen = item.isOpen === false ? true : false;
-    this.items = this.getItemsByTreeData(this.treeData);
+    this.updateItems();
     this.ontoggleNode.emit(item);
   }
 

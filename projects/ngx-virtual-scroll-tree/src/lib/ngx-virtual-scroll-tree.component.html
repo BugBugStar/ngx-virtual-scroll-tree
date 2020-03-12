@@ -1,7 +1,7 @@
 <virtual-scroller #scroll class="scroller" [items]="items">
     <ng-container *ngFor="let item of scroll.viewPortItems">
-        <div>
-            <span class="indent" [style.width.px]="item.indent * intendWidth"></span>
+        <div *ngIf="item.isVisible()">
+            <span class="indent" [style.width.px]="item.getIndent() * intendWidth"></span>
             <span *ngIf="item.children" (click)="_ontoggleNode(item)">
                 <span *ngIf="item.isOpen !== false">
                     <svg *ngIf="!iconParentOpen" class="icon icon-folder-open">
@@ -25,9 +25,11 @@
                 <ng-template *ngIf="iconLeaf" [ngTemplateOutlet]="iconLeaf" [ngTemplateOutletContext]="{ item: item }">
                 </ng-template>
             </span>
-            <ng-container *ngIf="!labelTemplate">{{ item.label }}</ng-container>
-            <ng-template *ngIf="labelTemplate" [ngTemplateOutlet]="labelTemplate" [ngTemplateOutletContext]="{ item: item }">
-            </ng-template>
+            <span (click)="_onclickLabel(item)">
+                <span *ngIf="!labelTemplate" [class.selected]="item.isSelected">{{ item.label }}</span>
+                <ng-template *ngIf="labelTemplate" [ngTemplateOutlet]="labelTemplate" [ngTemplateOutletContext]="{ item: item }">
+                </ng-template>
+            </span>
         </div>
     </ng-container>
 </virtual-scroller>
