@@ -2,8 +2,9 @@
   "name": "ngx-virtual-scroll-tree",
   "version": "0.0.2",
   "peerDependencies": {
-    "@angular/common": "^8.1.3",
-    "@angular/core": "^8.1.3",
-    "ngx-virtual-scroller": "3.0.3"
+    "@angular/common": "8.1.3",
+    "@angular/core": "8.1.3",
+    "ngx-virtual-scroller": "3.0.3",
+    "lodash": "4.17.15"
   }
 }

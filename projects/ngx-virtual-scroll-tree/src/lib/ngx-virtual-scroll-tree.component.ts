@@ -9,13 +9,12 @@ import * as _ from 'lodash';
   styleUrls: ['./ngx-virtual-scroll-tree.component.css' ],
 })
 export class VirtualScrollTreeComponent implements OnInit, OnChanges {
-  @Input() treeData: ITreeItem[];
-  @Input() lastTreeData: ITreeItem[];
+  @Input() treeData: any[];
+  @Input() lastTreeData: any[];
   @Input() intendWidth = 16;   // unit: px
   @Input() iconParentOpen: TemplateRef<any>;
   @Input() iconParentClose: TemplateRef<any>;
   @Input() iconLeaf: TemplateRef<any>;
-  @Input() iconTemplate: TemplateRef<any>;
   @Input() labelTemplate: TemplateRef<any>;
   @Input() filter: string;
   @Output() onclickLabel: EventEmitter<ITreeItem> = new EventEmitter<ITreeItem>();
@@ -59,7 +58,7 @@ export class VirtualScrollTreeComponent implements OnInit, OnChanges {
     return items;
   }
 
-  private getTreeItemListByTreeItem(treeItem: ITreeItem): ITreeItem[] {
+  private getTreeItemListByTreeItem(treeItem: any): ITreeItem[] {
     let treeItemList: ITreeItem[] = [treeItem instanceof TreeItem ? treeItem : new TreeItem(treeItem)];
     if (treeItem.children) {
       for (let i = 0; i < treeItem.children.length; i++) {
